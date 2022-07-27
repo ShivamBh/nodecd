@@ -89,25 +89,29 @@ jobs:
           IMAGE_TAG: ${{steps.version.outputs.prop}}
         run: |
           ssh ${{secrets.USERNAME}}@${{secrets.HOST}}
+          docker stop $(echo $CONTAINER)
+          docker rm $(echo $CONTAINER)
           docker pull $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker run -p 8080:8080 -d --name=$CONTAINER $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
-      - name: Stop deployed container
-        continue-on-error: true
-        run: |
-          ssh ${{secrets.USERNAME}}@${{secrets.HOST}} "docker stop ${{env.CONTAINER}}"
 
-      - name: Remove deployed container
-        continue-on-error: true
-        run: |
-          ssh ${{secrets.USERNAME}}@${{secrets.HOST}} "docker rm ${{env.CONTAINER}}"
+      # - name: Stop deployed container
+      #   continue-on-error: true
+      #   run: |
+      #     ssh ${{secrets.USERNAME}}@${{secrets.HOST}} "docker stop ${{env.CONTAINER}}"
 
-      - name: Start docker container
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: skara-api
-          IMAGE_TAG: ${{steps.version.outputs.prop}}
-        run: |
-          ssh ${{secrets.USERNAME}}@${{secrets.HOST}} "docker run -p 8080:8080 -d --name=${{env.CONTAINER}} $ECR_REGISTRY/$ECR_REPOSITORY:latest"
+      # - name: Remove deployed container
+      #   continue-on-error: true
+      #   run: |
+      #     ssh ${{secrets.USERNAME}}@${{secrets.HOST}} "docker rm ${{env.CONTAINER}}"
+
+      # - name: Start docker container
+      #   env:
+      #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      #     ECR_REPOSITORY: skara-api
+      #     IMAGE_TAG: ${{steps.version.outputs.prop}}
+      #   run: |
+      #     ssh ${{secrets.USERNAME}}@${{secrets.HOST}} "docker run -p 8080:8080 -d --name=${{env.CONTAINER}} $ECR_REGISTRY/$ECR_REPOSITORY:latest"
 
 
       
