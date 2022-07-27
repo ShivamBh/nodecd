@@ -92,7 +92,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: skara-api
           IMAGE_TAG: ${{steps.version.outputs.prop}}
-        run: |
+        script: |
           docker pull $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
       - name: Stop deployed container
