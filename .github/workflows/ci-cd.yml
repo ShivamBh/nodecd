@@ -65,7 +65,7 @@ jobs:
       #   run: ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
 
       - name: Connect to Digital Ocean Droplet
-        uses: appleboy/ssh-action@v0.1.2
+        uses: appleboy/ssh-action@v0.1.4
         with: 
           host: ${{secrets.HOST}}
           key: ${{secrets.SSHKEY}}
