@@ -56,20 +56,20 @@ jobs:
       #   run: |
       #     echo "::set-output name=SSH_KEY::ssh-keygen -p -f ${{secrets.SSHKEY}} -m pem"
 
-      # - name: Setup SSH connection
-      #   uses: webfactory/ssh-agent@v0.5.1
-      #   with:
-      #     ssh-private-key: ${{ steps.convert-key.outputs.SSH_KEY }}
+      - name: Setup SSH connection
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSHKEY }}
 
-      # - name: Adding Known Hosts
-      #   run: ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
 
-      - name: Connect to Digital Ocean Droplet
-        uses: appleboy/ssh-action@v0.1.4
-        with: 
-          host: ${{secrets.HOST}}
-          key: ${{secrets.SSHKEY}}
-          username: ${{secrets.USERNAME}}
+      # - name: Connect to Digital Ocean Droplet
+      #   uses: appleboy/ssh-action@v0.1.4
+      #   with: 
+      #     host: ${{secrets.HOST}}
+      #     key: ${{secrets.SSHKEY}}
+      #     username: ${{secrets.USERNAME}}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
