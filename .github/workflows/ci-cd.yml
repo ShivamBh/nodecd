@@ -83,16 +83,12 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Pull Latest Container
-        uses: appleboy/ssh-action@v0.1.4
-        with: 
-          host: ${{secrets.HOST}}
-          key: ${{secrets.SSHKEY}}
-          username: ${{secrets.USERNAME}}
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: skara-api
           IMAGE_TAG: ${{steps.version.outputs.prop}}
-        script: |
+        run: |
+          ssh ${{secrets.USERNAME}}@${{secrets.HOST}}
           docker pull $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
       - name: Stop deployed container
