@@ -89,8 +89,7 @@ jobs:
           IMAGE_TAG: ${{steps.version.outputs.prop}}
         run: |
           ssh ${{secrets.USERNAME}}@${{secrets.HOST}}
-          docker stop $(echo $CONTAINER)
-          docker rm $(echo $CONTAINER)
+          docker ps -q --filter "name=${{env.CONTAINER}}" | grep -q . && docker stop $CONTAINER && docker rm -fv $CONTAINER
           docker pull $ECR_REGISTRY/$ECR_REPOSITORY:latest
           docker run -p 8080:8080 -d --name=$CONTAINER $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
