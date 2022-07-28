@@ -106,9 +106,18 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSHKEY }}
           script: |
+            echo "Logging in to ECR..."
             aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin ${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.ap-south-1.amazonaws.com
-            docker ps -q --filter "name=${{env.CONTAINER}}" | grep -q . && docker stop $CONTAINER && docker rm -fv $CONTAINER
+            echo "Logged in to ECR with docker"
+            echo "Stopping containers using this image..."
+            docker ps -q --filter ancestor="skara-api" | xargs -r docker stop
+            echo "Removing unused containers..."
+            docker rm -v $(docker ps -a -q -f status=exited)
+            echo "Removing unused images..."
+            docker rmi $(docker images -f "dangling=true" -q)
+            echo "Pulling fresh image from ECR"
             docker pull $ECR_REGISTRY/$ECR_REPOSITORY:latest
+            echo "Running container from ECR image..."
             docker run -p 8080:8080 -d --name=$CONTAINER $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
 
