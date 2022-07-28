@@ -118,7 +118,7 @@ jobs:
             echo "Pulling fresh image from ECR"
             docker pull $ECR_REGISTRY/$ECR_REPOSITORY:latest
             echo "Running container from ECR image..."
-            docker run -p 8080:8080 -d --name=$CONTAINER ${{secrets.ECR_IMAGE_URI_LATEST}}
+            docker run -p 8080:3000 -d --name=$CONTAINER ${{secrets.ECR_IMAGE_URI_LATEST}}
 
 
 
