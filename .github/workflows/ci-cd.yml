@@ -105,7 +105,6 @@ jobs:
           key: ${{ secrets.SSHKEY }}
           script: |
             # Login to registry
-            echo (${{secrets.AWS_ACCOUNT_ID}})
             aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin https://${{secrets.AWS_ACCOUNT_ID}}.dkr.ecr.region.amazonaws.com
             
             docker ps -q --filter "name=${{env.CONTAINER}}" | grep -q . && docker stop $CONTAINER && docker rm -fv $CONTAINER
