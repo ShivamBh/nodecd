@@ -5,7 +5,8 @@ export class AppService {
   getHello() {
     return {
       json: 'data',
-      newProps: 'shibu'
+      newProps: 'shibu',
+      val: 'testing'
     };
   }
 }
