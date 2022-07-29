@@ -116,11 +116,9 @@ jobs:
             # echo "Removing unused images..."
             # docker rmi $(docker images -f "dangling=true" -q)
             echo "Pulling fresh image from ECR"
-            echo $ECR_REGISTRY/$ECR_REPOSITORY:latest
-            echo ${{secrets.ECR_IMAGE_URI_LATEST}}
             docker pull ${{secrets.ECR_IMAGE_URI_LATEST}}
             echo "Running container from ECR image..."
-            docker run -p 8080:3000 -d --name=$CONTAINER $ECR_REGISTRY/$ECR_REPOSITORY:latest
+            docker run -p 8080:3000 -d --name=$CONTAINER ${{secrets.ECR_IMAGE_URI_LATEST}}
 
 
 
