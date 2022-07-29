@@ -113,8 +113,8 @@ jobs:
             docker ps -q --filter ancestor="${{secrets.ECR_IMAGE_URI_LATEST}}" | xargs -r docker stop
             echo "Removing unused containers..."
             docker rm -v $(docker ps -a -q -f status=exited)
-            echo "Removing unused images..."
-            docker rmi $(docker images -f "dangling=true" -q)
+            # echo "Removing unused images..."
+            # docker rmi $(docker images -f "dangling=true" -q)
             echo "Pulling fresh image from ECR"
             docker pull $ECR_REGISTRY/$ECR_REPOSITORY:latest
             echo "Running container from ECR image..."
